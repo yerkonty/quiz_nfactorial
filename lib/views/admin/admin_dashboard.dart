@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizdigitalsat/controllers/question_controller.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -9,6 +10,7 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  final QuestionController _questionController = Get.put(QuestionController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +40,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   _showDialogBox() {
     Get.defaultDialog(
+      contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
       title: "Add Quiz",
       content: Column(
         children: [
@@ -51,6 +54,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ),
         ],
       ),
+      textConfirm: "Create",
+      textCancel: "Cancel",
+      onConfirm: () {
+        _questionController.savedQuestionCategotyToSharedPreferences();
+        Get.back();
+      },
     );
   }
 }
