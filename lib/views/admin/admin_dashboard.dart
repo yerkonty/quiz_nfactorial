@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizdigitalsat/controllers/question_controller.dart';
+import 'package:quizdigitalsat/views/admin/admin_screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -29,6 +30,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
+                  onTap: () {
+                    Get.to(
+                      AdminScreen(
+                        quizCategory: controller.savedCategories[index],
+                      ),
+                    );
+                  },
                   leading: const Icon(Icons.question_answer),
                   title: Text(controller.savedCategories[index]),
                   subtitle: Text(controller.savedSubtitle[index]),
