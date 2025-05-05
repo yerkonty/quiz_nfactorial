@@ -10,24 +10,35 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-  final QuestionController _questionController = Get.put(QuestionController());
+  final QuestionController questionController = Get.put(QuestionController());
+
+  @override
+  void initState() {
+    super.initState();
+    questionController.loadQuestionCategoryFromSharedPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Admin Dashboard")),
-      body: ListView.builder(
-        itemCount: 100,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              leading: Icon(Icons.question_answer),
-              title: const Text("Title"),
-              subtitle: const Text("Subtitle"),
-              trailing: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.delete),
-              ),
-            ),
+      body: GetBuilder<QuestionController>(
+        builder: (controller) {
+          return ListView.builder(
+            itemCount: controller.savedCategories.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  leading: const Icon(Icons.question_answer),
+                  title: Text(controller.savedCategories[index]),
+                  subtitle: Text(controller.savedSubtitle[index]),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.delete),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
@@ -45,9 +56,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       content: Column(
         children: [
           TextFormField(
+            controller: questionController.categoryTitleController,
             decoration: InputDecoration(hintText: "Enter the Category name"),
           ),
           TextFormField(
+            controller: questionController.categorySubtitleController,
             decoration: InputDecoration(
               hintText: "Enter the Category subtitle",
             ),
@@ -57,7 +70,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       textConfirm: "Create",
       textCancel: "Cancel",
       onConfirm: () {
-        _questionController.savedQuestionCategotyToSharedPreferences();
+        questionController.savedQuestionCategoryToSharedPreferences();
         Get.back();
       },
     );
